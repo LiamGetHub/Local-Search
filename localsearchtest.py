@@ -18,4 +18,8 @@ if __name__=="__main__":
 
     search = LocalSearchPlayground(height=5, width=9, spots=[(0,2), (1,8), (3,0), (4, 3)], solutions=total_solutions)
 
-    search.show("Local search")
+    #search.show("Local search \n")
+
+    print("Testing the helper functions...")
+
+    search.test_helper_functions(verbose = True)

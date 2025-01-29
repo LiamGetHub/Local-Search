@@ -147,3 +147,16 @@ class LocalSearchPlayground():
 
         if len(solutions) != 0:
             print("\nBest cost is", self.__calculate_cost(solutions), "with solutions", solutions, "\n")
+    
+    #wrote in class 1/29
+    def test_helper_functions(self, verbose=True) :
+
+        #set a random current state
+        self.__current_state = self.__random_state()
+
+        #show initail random state
+        if verbose:
+            self.show("initail random state", self.__current_state)
+
+        for solution in self.__current_state:
+            print("Solution", solution)
