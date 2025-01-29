@@ -170,9 +170,26 @@ class LocalSearchPlayground():
 
 
     def hill_climbing_random_restart(self, max_iterations=25, verbose=True):
-        # code for hill climbing with random restart
 
-        pass
+        best_cost = self.__infinity
+
+        for i in range(max_iterations):
+
+            current_state = self.hill_climbing(verbose=False)
+            current_cost = self.__calculate_cost(current_state)
+
+            if verbose:
+                print(str(i) + ":", "Cost of the current state is", current_cost, "with solutions", current_state, end="")
+                print(", best cost so far is", best_cost, end="")
+
+            if current_cost < best_cost:
+                best_cost = current_cost
+                best_state = current_state
+            
+            if verbose:
+                print(", new best cost is", best_cost)
+                
+        return best_state
 
     def simulated_annealing(self, max_iterations=100, verbose=True):
         # code for simulated annealing

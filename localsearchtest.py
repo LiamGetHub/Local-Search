@@ -25,9 +25,18 @@ if __name__=="__main__":
     #search.test_helper_functions(verbose = True)
 
 
+
     #hill climbing
-    print("\nHill climbing with random restart")
+    #print("\nHill climbing with random restart")
 
-    solution = search.hill_climbing(verbose=show_trace)
+    #solution = search.hill_climbing(verbose=show_trace)
 
-    search.show("Final state", solution)
+    #search.show("Final state", solution)
+
+
+
+    solution = search.hill_climbing_random_restart()
+
+    search.show("final state", solution)
+
+    
