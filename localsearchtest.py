@@ -20,6 +20,14 @@ if __name__=="__main__":
 
     #search.show("Local search \n")
 
-    print("Testing the helper functions...")
+    #print("Testing the helper functions...")
 
-    search.test_helper_functions(verbose = True)
+    #search.test_helper_functions(verbose = True)
+
+
+    #hill climbing
+    print("\nHill climbing with random restart")
+
+    solution = search.hill_climbing(verbose=show_trace)
+
+    search.show("Final state", solution)

@@ -117,9 +117,57 @@ class LocalSearchPlayground():
         return random_state
 
     def hill_climbing(self, max_iterations=25, verbose=True):
-        # code for hill climbing
+        # set a random current state
 
-        pass
+        self.__current_state = self.__random_state()
+
+        # show initial random state
+
+        if verbose:
+            self.show("Initial random state", self.__current_state)
+
+        for i in range(max_iterations):
+            if verbose:
+                print(str(i) + ":", "Cost of the current state is", self.__calculate_cost(self.__current_state), "with solutions", self.__current_state)
+
+            best_neighbors = []
+            best_neighbor_cost = self.__infinity
+
+            # explore the neighbors of the current state which has self.__solutions, each solution may have up to 4 neighbors
+
+            for solution in self.__current_state:
+                # the operator * works on any iterable object, it unpacks a tuple or a list, *solution unpacks the row and the column of the spot
+
+                solution_neighbors = self.__find_neighbors(*solution)
+
+                # generate set of neighbors
+
+                for current_neighbor in solution_neighbors:
+                    neighbor = self.__current_state.copy()
+                    neighbor.remove(solution)
+                    neighbor.add(current_neighbor)
+
+                    # check if the current neighbor is the best so far
+
+                    cost = self.__calculate_cost(neighbor)
+
+                    # compare the current neighbor's cost with the best neighbor's cost and update the list of best neighbors
+
+                    if cost < best_neighbor_cost:
+                        best_neighbor_cost = cost
+                        best_neighbors = [neighbor]
+                    elif best_neighbor_cost == cost:
+                        best_neighbors.append(neighbor)
+
+            # the search ends when the best neighbor's cost is not better than the current state
+
+            if best_neighbor_cost >= self.__calculate_cost(self.__current_state):
+                return self.__current_state
+            else:
+                # update the current state with a random best neighbor
+
+                self.__current_state = random.choice(best_neighbors)
+
 
     def hill_climbing_random_restart(self, max_iterations=25, verbose=True):
         # code for hill climbing with random restart
