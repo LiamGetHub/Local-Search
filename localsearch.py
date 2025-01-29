@@ -156,7 +156,26 @@ class LocalSearchPlayground():
 
         #show initail random state
         if verbose:
-            self.show("initail random state", self.__current_state)
+            self.show("Initail random state", self.__current_state)
 
         for solution in self.__current_state:
-            print("Solution", solution)
+            print("Solution", solution, "\n")
+        
+        #explore nodes of each solution (up to 4 neighbors)
+        for solution in self.__current_state:
+            print("Solution", solution, "has ", end="")
+
+            solution_neighbors = self.__find_neighbors(*solution)
+
+            print("neighbors", solution_neighbors, "\n")
+
+            for current_neighbor in solution_neighbors:
+
+                neighbor = self.__current_state.copy()
+
+                neighbor.remove(solution)
+                neighbor.add(current_neighbor)
+
+                print("  Neightbor", current_neighbor, "cost is", self.__calculate_cost(neighbor))
+
+            print("")
