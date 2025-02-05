@@ -188,13 +188,98 @@ class LocalSearchPlayground():
             
             if verbose:
                 print(", new best cost is", best_cost)
-                
+
         return best_state
 
-    def simulated_annealing(self, max_iterations=100, verbose=True):
-        # code for simulated annealing
+    @staticmethod
+    def __temperature(t):
+        # the temperature function used by simulated annealing is a decreasing function T(t) = 1/t
 
-        pass
+        return 1/(t*0.003)
+
+    def simulated_annealing(self, max_iterations=100, threshold=0.5, verbose=True):
+        # set a random current state
+
+        self.__current_state = self.__random_state()
+
+        best_state = self.__current_state
+        best_cost = self.__calculate_cost(self.__current_state)
+
+        # show initial random state
+
+        if verbose:
+            self.show("Initial random state", self.__current_state)
+
+        for i in range(max_iterations):
+            if verbose:
+                print(str(i) + ":", "Cost of the current state is", self.__calculate_cost(self.__current_state), "with solutions", self.__current_state, end="")
+
+            best_neighbors = []
+            best_neighbor_cost = self.__infinity
+
+            # explore the neighbors of the current state which has self.__solutions, each solution may have up to 4 neighbors
+
+            for solution in self.__current_state:
+                # the operator * works on any iterable object, it unpacks a tuple or a list, *solution unpacks the row and the column of the spot
+
+                solution_neighbors = self.__find_neighbors(*solution)
+
+                # generate set of neighbors
+
+                for current_neighbor in solution_neighbors:
+                    neighbor = self.__current_state.copy()
+                    neighbor.remove(solution)
+                    neighbor.add(current_neighbor)
+
+                    # check if the current neighbor's cost is the best cost found so far
+
+                    cost = self.__calculate_cost(neighbor)
+
+                    if cost < best_neighbor_cost:
+                        best_neighbor_cost = cost
+                        best_neighbors = [neighbor]
+                    elif best_neighbor_cost == cost:
+                        best_neighbors.append(neighbor)
+
+            # pick a random neighbor and compare its cost with the cost of the current state
+
+            random_neighbor = random.choice(best_neighbors)
+
+            # delta = cost of the current state - cost of the random neighbor
+
+            delta = self.__calculate_cost(self.__current_state) - self.__calculate_cost(random_neighbor)
+
+            # if delta > 0, update the current state with a better random neighbor
+            # if delta < 0, update the current state with a worse random neighbor if probability exp(delta/temperature(i)) >= 50%
+
+            if verbose:
+                print(", cost of the random neighbor is",self.__calculate_cost(random_neighbor))
+
+            if delta > 0:
+
+                self.__current_state = random_neighbor
+
+                if verbose:
+                    print(" " * len(str(i) + ":"), "Delta", delta, "is > 0, choose a better random neighbor with cost", self.__calculate_cost(self.__current_state), "and solutions", self.__current_state)
+
+            elif delta < 0:
+
+                temp = self.__temperature(i)
+
+                if math.exp(delta/temp) >= threshold:
+                    self.__current_state = random_neighbor
+
+                    if verbose:
+                        print(" " * len(str(i) + ":"), "Delta", delta, "is < 0, choose a worse random neighbor with cost", self.__calculate_cost(self.__current_state), end="")
+                        print(" and probability", round(math.exp(delta/temp), 4))
+
+            # save the best state
+
+            if self.__calculate_cost(self.__current_state) < best_cost:
+                best_cost = self.__calculate_cost(self.__current_state)
+                best_state = self.__current_state
+
+        return best_state
 
     def show(self, title, solutions=[]):
         print("\n" + title + "\n")

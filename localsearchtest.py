@@ -39,4 +39,12 @@ if __name__=="__main__":
 
     search.show("final state", solution)
 
+
+    # simulated annealing
+    print("\nSimulated Anealing")
+
+    solution = search.simulated_annealing(max_iterations=25, threshold=0.5, verbose=show_trace)
+
+    search.show("Final state", solution)
+
     
